@@ -51,7 +51,7 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel = vie
                     if (isSuccess) {
                         navController.navigate("main")
                     } else {
-                        Toast.makeText(context, "Ошибка регистрации", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Ошибка входа", Toast.LENGTH_SHORT).show()
                     }
                 }
             }, modifier = Modifier.fillMaxWidth()
