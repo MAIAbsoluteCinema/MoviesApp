@@ -61,7 +61,7 @@ fun MainScreen(
             ) {
                 items(movies) { movie ->
                     MovieItem(movie) {
-                        navController.navigate("movie_detail/${movie.title}")
+                        navController.navigate("movie_detail/${movie.movieId}")
                     }
                 }
             }
