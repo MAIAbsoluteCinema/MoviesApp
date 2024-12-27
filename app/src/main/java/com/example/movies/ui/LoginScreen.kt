@@ -1,10 +1,12 @@
 package com.example.movies.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,6 +16,7 @@ import com.example.movies.viewmodel.UserViewModel
 
 @Composable
 fun LoginScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -44,11 +47,12 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel = vie
 
         Button(
             onClick = {
-                val isSuccess = userViewModel.loginUser(email, password)
-                if (isSuccess) {
-                    navController.navigate("main")
-                } else {
-                    // Показать ошибку
+                userViewModel.loginUser(email, password) { isSuccess ->
+                    if (isSuccess) {
+                        navController.navigate("main")
+                    } else {
+                        Toast.makeText(context, "Ошибка регистрации", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }, modifier = Modifier.fillMaxWidth()
         ) {

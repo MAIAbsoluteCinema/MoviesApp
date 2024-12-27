@@ -1,10 +1,12 @@
 package com.example.movies.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,9 +15,11 @@ import com.example.movies.viewmodel.UserViewModel
 
 @Composable
 fun RegisterScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -24,7 +28,8 @@ fun RegisterScreen(navController: NavController, userViewModel: UserViewModel = 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(value = email,
+        TextField(
+            value = email,
             onValueChange = { email = it },
             label = { Text("Электронная почта") },
             modifier = Modifier.fillMaxWidth()
@@ -32,7 +37,17 @@ fun RegisterScreen(navController: NavController, userViewModel: UserViewModel = 
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(value = password,
+        TextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Имя пользователя") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = password,
             onValueChange = { password = it },
             label = { Text("Пароль") },
             visualTransformation = PasswordVisualTransformation(),
@@ -43,13 +58,15 @@ fun RegisterScreen(navController: NavController, userViewModel: UserViewModel = 
 
         Button(
             onClick = {
-                val isSuccess = userViewModel.registerUser(email, password)
-                if (isSuccess) {
-                    navController.navigate("main")
-                } else {
-                    // Показать ошибку
+                userViewModel.registerUser(email, password, username) { isSuccess ->
+                    if (isSuccess) {
+                        navController.navigate("main")
+                    } else {
+                        Toast.makeText(context, "Ошибка регистрации", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }, modifier = Modifier.fillMaxWidth()
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Зарегистрироваться")
         }
