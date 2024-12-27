@@ -7,7 +7,7 @@ import com.example.movies.data.local.LocalDataSource
 import com.example.movies.data.local.PreferencesManager
 import com.example.movies.data.network.LoginRequest
 import com.example.movies.data.network.RegisterRequest
-import com.example.movies.data.network.RetrofitInstance
+import com.example.movies.data.network.RetrofitInstance8080
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +20,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         email: String, password: String, username: String, onResult: (Boolean) -> Unit
     ) {
         val request = RegisterRequest(email, password, username)
-        val call = RetrofitInstance.api.registerUser(request)
+        val call = RetrofitInstance8080.api.registerUser(request)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -42,7 +42,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loginUser(email: String, password: String, onResult: (Boolean) -> Unit) {
         val request = LoginRequest(email, password)
-        val call = RetrofitInstance.api.loginUser(request)
+        val call = RetrofitInstance8080.api.loginUser(request)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

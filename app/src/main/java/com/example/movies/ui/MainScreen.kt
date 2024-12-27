@@ -2,6 +2,7 @@ package com.example.movies.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,6 +30,12 @@ fun MainScreen(
     movieViewModel: MovieViewModel = viewModel(),
     userViewModel: UserViewModel = viewModel()
 ) {
+    LaunchedEffect(Unit) {
+        movieViewModel.fetchMovies(100)
+    }
+
+    val movies by movieViewModel.movies.observeAsState(emptyList())
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -42,10 +52,7 @@ fun MainScreen(
                 }
             )
         },
-
         content = { paddingValues ->
-            val movies = movieViewModel.getMovies()
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -70,7 +77,20 @@ fun MovieItem(movie: Movie, onClick: () -> Unit) {
             .padding(8.dp)
             .clickable(onClick = onClick)
     ) {
-        Text(text = movie.title, style = MaterialTheme.typography.titleMedium)
-        Text(text = "Рейтинг: ${movie.rating}", style = MaterialTheme.typography.bodyMedium)
+        Text(
+            text = movie.title,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Рейтинг: ${movie.vote_average}",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Оценок: ${movie.vote_count}",
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
     }
 }

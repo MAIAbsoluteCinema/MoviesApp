@@ -5,7 +5,6 @@ import com.example.movies.model.MovieDetail
 
 class MovieDetailViewModel : ViewModel() {
 
-    // Моковые данные, которые позже будут заменены данными из бэкенда
     private val mockMovieDetails = mapOf(
         "Титаник" to MovieDetail(
             title = "Титаник",
@@ -34,7 +33,6 @@ class MovieDetailViewModel : ViewModel() {
     )
 
     fun getMovieDetail(title: String): MovieDetail? {
-        // Здесь позже будет запрос к бэкенду
         return mockMovieDetails[title]
     }
 }
